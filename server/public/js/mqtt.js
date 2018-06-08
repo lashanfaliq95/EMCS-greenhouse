@@ -6,13 +6,13 @@ socket.on('mqtt', function(msg){
    console.log(res);
    part_one = res[0];
    part_two = res[1];
-   if(part_one == "temp"){
+   if(part_one == "temperature"){
      graph_temp = part_two;
      count = count + 1;
      // console.log(graph_temp);
-   }else if(part_one == "hum"){
+   }else if(part_one == "humidity"){
      graph_hum = part_two;
-   }else if(part_one == "soil"){
+   }else if(part_one == "soilMoisture"){
      graph_soil = part_two;
    }else if(part_one == "light"){
      graph_light = part_two;

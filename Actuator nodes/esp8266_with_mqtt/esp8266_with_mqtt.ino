@@ -1,29 +1,47 @@
 #include <PubSubClient.h>
 #include <ESP8266WiFi.h>
+#include <BH1750.h>
+#include <Wire.h>
 
+
+#include "DHT.h"        // including the library of DHT11 temperature and humidity sensor
+#define DHTTYPE DHT11   // DHT 11
+#define MQTT_SERVER "192.168.8.100"
+#define dht_dpin 0 //pin D3 for dht11
+
+void readSensors();
 void callback(char* topic, byte* payload, unsigned int length);
-//EDIT THESE LINES TO MATCH YOUR SETUP
-#define MQTT_SERVER "192.168.1.4"
-const char* ssid = "ZTE";
-const char* password = "12345678912340000000000000";
 
-//LED on ESP8266 GPIO2
-const int lightPin = D5;
-
-char* lightTopic = "testTopic";
-
-
+DHT dht(dht_dpin, DHTTYPE);
+BH1750 lightMeter;
 WiFiClient wifiClient;
 PubSubClient client(MQTT_SERVER, 1883, callback, wifiClient);
+
+const char* ssid = "D4G";
+const char* password = "NoInternet";
+const int lightPin = D5;
+
+char* lightTopic = "light";
+char* tempTopic = "temperature";
+char* humidTopic = "humidity";
+char* soilMoistureTopic = "soilMoisture";
+
+int sense_Pin = 0; // sensor input at Analog pin A0 for the soil moisture sensor
+int value = 0;
+
+
 
 void setup() {
   //initialize the light as an output and set to LOW (off)
   pinMode(lightPin, OUTPUT);
   digitalWrite(lightPin, HIGH);
 
+  //intialising the dht11 sensors
+  dht.begin();
+  
   //start the serial line for debugging
   Serial.begin(115200);
-  delay(100);
+  delay(500);
 
 
   //start wifi subsystem
@@ -32,7 +50,7 @@ void setup() {
   reconnect();
 
   //wait a bit before starting the main loop
-      delay(2000);
+   delay(2000);
 }
 
 
@@ -44,10 +62,11 @@ void loop(){
 
   //maintain MQTT connection
   client.loop();
-
+ 
   //MUST delay to allow ESP8266 WIFI functions to run
-  delay(10); 
-  //          client.publish(lightTopic, "Light On");
+  delay(100); 
+         
+   readSensors();
 
 }
 
@@ -65,14 +84,15 @@ void callback(char* topic, byte* payload, unsigned int length) {
   //turn the light on if the payload is '1' and publish to the MQTT server a confirmation message
   if(payload[0] == '1'){
     digitalWrite(lightPin, LOW);
-    //client.publish("/test/confirm", "Light On");
+   client.publish("testTopic", "Light On");
+   
 
   }
 
   //turn the light off if the payload is '0' and publish to the MQTT server a confirmation message
   else if (payload[0] == '0'){
     digitalWrite(lightPin, HIGH);
-    //client.publish("/test/confirm", "Light Off");
+   client.publish("testTopic", "Light Off");
   }
 
 }
@@ -82,8 +102,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void reconnect() {
   
-
-  //attempt to connect to the wifi if connection is lost
+//attempt to connect to the wifi if connection is lost
   if(WiFi.status() != WL_CONNECTED){
     //debug printing
     Serial.print("Connecting to ");
@@ -144,3 +163,30 @@ String macToStr(const uint8_t* mac){
 
   return result;
 }  
+
+void readSensors() {
+  //humidity and temperature
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+//soil moisture level
+  value = analogRead(sense_Pin);
+  value = value / 10;
+  
+//light intensity
+  double light = 10;
+
+char  tempt[10];
+char temph[10];
+char tempvalue[10];
+  
+ dtostrf(t,4,4,tempt);
+ dtostrf(h,4,4,temph);
+ dtostrf(value,4,4,tempvalue);
+ 
+  client.publish(lightTopic, "Light On");
+  client.publish(tempTopic, tempt);
+  client.publish(humidTopic,temph);
+  client.publish(soilMoistureTopic,tempvalue);
+}
+

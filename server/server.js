@@ -100,7 +100,7 @@ mongoose.Promise = global.Promise;
 
 
 // create an mqtt client object and connect to the mqtt broker
-var client = mqtt.connect('mqtt://139.59.23.178');
+var client = mqtt.connect('mqtt://192.168.8.100');
 
 http.listen((process.env.PORT || 8080), function(){
     //  http.listen((3000), function(){
@@ -192,10 +192,10 @@ io.sockets.on('connection', function (socket) {
 
 client.on('connect', function () {
 
-    client.subscribe('temp');
-    client.subscribe('hum');
+    client.subscribe('temperature');
+    client.subscribe('humidity');
     client.subscribe('light');
-    client.subscribe('soil');
+    client.subscribe('soilMoisture');
 
 });
 
@@ -214,10 +214,10 @@ client.on('message', function (topic, message) {
 
          // console.log(message)
 
-  if(topic.toString() == 'temp'){
+  if(topic.toString() == 'temperature'){
        console.log(topic.toString() + ' ' +  message.toString());
        t = message.toString();
-       io.emit('mqtt','temp ' + t);
+       io.emit('mqtt','temperature ' + t);
 
        var anewrow = new PUser3 ({
             time: date,
@@ -231,10 +231,10 @@ client.on('message', function (topic, message) {
        }
        t_p = t;
   }
-  if(topic.toString() == 'hum'){
+  if(topic.toString() == 'humidity'){
       console.log(topic.toString() + ' ' +  message.toString());
       h = message.toString();
-      io.emit('mqtt','hum ' + h);
+      io.emit('mqtt','humidity ' + h);
 
         var bnewrow = new PUser4 ({
             time: date,
@@ -247,10 +247,10 @@ client.on('message', function (topic, message) {
         h_p = h;
   }
 
-  if(topic.toString() == 'soil'){
+  if(topic.toString() == 'soilMoisture'){
       console.log(topic.toString() + ' ' +  message.toString());
       s = message.toString();
-      io.emit('mqtt','soil ' + s);
+      io.emit('mqtt','soilMoisture ' + s);
 
         var cnewrow = new PUser5 ({
             time: date,
@@ -410,7 +410,7 @@ setInterval(function () {
 
             }
               // console.log(hum_.length);
-              io.emit('mqtt_data','light ' + light_);
+              io.emit('mqtt_data','testTopic ' + light_);
 
         });
 
