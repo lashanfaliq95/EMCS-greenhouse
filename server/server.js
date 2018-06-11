@@ -100,7 +100,7 @@ mongoose.Promise = global.Promise;
 
 
 // create an mqtt client object and connect to the mqtt broker
-var client = mqtt.connect('mqtt://192.168.8.100');
+var client = mqtt.connect('mqtt://192.168.8.102');
 
 http.listen((process.env.PORT || 8080), function(){
     //  http.listen((3000), function(){

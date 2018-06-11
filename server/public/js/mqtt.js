@@ -20,9 +20,9 @@ socket.on('mqtt', function(msg){
 });
 function pump1_control() {
    if (document.querySelectorAll("input[id='switch7']:checked").length >= 1) {
-       socket.emit('publish', {topic:"testTopic",payload:"1"});
+       socket.emit('publish', {topic:"pump",payload:"1"});
    }else{
-       socket.emit('publish', {topic:"testTopic",payload:"0"});
+       socket.emit('publish', {topic:"pump",payload:"0"});
    }
 }
 function pump2_control() {

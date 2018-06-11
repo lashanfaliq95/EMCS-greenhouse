@@ -6,8 +6,8 @@
 
 #include "DHT.h"        // including the library of DHT11 temperature and humidity sensor
 #define DHTTYPE DHT11   // DHT 11
-#define MQTT_SERVER "192.168.8.100"
 #define dht_dpin 0 //pin D3 for dht11
+#define MQTT_SERVER "192.168.8.102"
 
 void readSensors();
 void callback(char* topic, byte* payload, unsigned int length);
@@ -25,6 +25,8 @@ char* lightTopic = "light";
 char* tempTopic = "temperature";
 char* humidTopic = "humidity";
 char* soilMoistureTopic = "soilMoisture";
+char * fan="fan";
+char * pump="pump";
 
 int sense_Pin = 0; // sensor input at Analog pin A0 for the soil moisture sensor
 int value = 0;
@@ -138,7 +140,8 @@ void reconnect() {
       //if connected, subscribe to the topic(s) we want to be notified about
       if (client.connect((char*) clientName.c_str())) {
         Serial.print("\tMTQQ Connected");
-        client.subscribe(lightTopic);
+        client.subscribe(fan);
+         client.subscribe(pump);
 
       }
 
