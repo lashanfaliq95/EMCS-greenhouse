@@ -46,6 +46,13 @@ function fan2_control() {
        socket.emit('publish', {topic:"fa2",payload:"0"});
    }
 }
+function humidifier1_control(elem) {
+    if (document.querySelectorAll("input[id='switch8']:checked").length >= 1) {
+        socket.emit('publish', {topic:"humidifier",payload:"1"});
+    }else{
+        socket.emit('publish', {topic:"humidifier",payload:"0"});
+    }
+}
 function rule1_apply() {
     socket.emit('rules', {topic:"fan",payload:"0"});
 }
