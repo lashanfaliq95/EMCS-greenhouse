@@ -18,6 +18,12 @@ socket.on('mqtt', function(msg){
      graph_light = part_two;
    }
 });
+
+socket.on('control', function(actuator_control){
+    console.log('control here ', actuator_control);
+        socket.emit('publish', actuator_control);
+});
+
 function pump1_control() {
    if (document.querySelectorAll("input[id='switch7']:checked").length >= 1) {
        socket.emit('publish', {topic:"pump",payload:"1"});
