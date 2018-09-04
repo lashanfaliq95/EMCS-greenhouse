@@ -7,7 +7,7 @@
 #include "DHT.h"        // including the library of DHT11 temperature and humidity sensor
 #define DHTTYPE DHT11   // DHT 11
 #define dht_dpin 0//pin D3 for dht11
-#define MQTT_SERVER "192.168.8.100"
+#define MQTT_SERVER "192.168.8.105"
 
 void readSensors();
 void callback(char* topic, byte* payload, unsigned int length);
@@ -27,6 +27,7 @@ char* humidTopic = "humidity";
 char* soilMoistureTopic = "soilMoisture";
 char * fan="fan";
 char * pump="pump";
+char * humidifier="humidifier";
 
 int sense_Pin = 0; // sensor input at Analog pin A0 for the soil moisture sensor
 int value = 0;
@@ -68,10 +69,10 @@ void loop(){
   client.loop();
  
   //MUST delay to allow ESP8266 WIFI functions to run
-  delay(100); 
+ 
          
    readSensors();
-
+ delay(500); 
 }
 
 
@@ -127,7 +128,7 @@ Serial.println("off");
   }
   }
 
-      if(topicStr.equals("humidifier")){
+    if(topicStr.equals("humidifier")){
   //turn the light on if the payload is '1' and publish to the MQTT server a confirmation message
   if(payload[0] == '1'){
      digitalWrite(D6, HIGH);
@@ -147,14 +148,7 @@ Serial.println("on");
 Serial.println("off");
   }
   }
-  
-  
-
-  
-
 }
-
-
 
 
 void reconnect() {
@@ -197,6 +191,7 @@ void reconnect() {
         Serial.print("\tMTQQ Connected");
         client.subscribe(fan);
          client.subscribe(pump);
+          client.subscribe(humidifier);
 
       }
 

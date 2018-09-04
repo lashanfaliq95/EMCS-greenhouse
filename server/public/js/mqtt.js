@@ -47,6 +47,7 @@ function fan2_control() {
    }
 }
 function humidifier1_control(elem) {
+
     if (document.querySelectorAll("input[id='switch8']:checked").length >= 1) {
         socket.emit('publish', {topic:"humidifier",payload:"1"});
     }else{
