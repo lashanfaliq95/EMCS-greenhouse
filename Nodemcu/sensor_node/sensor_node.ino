@@ -110,7 +110,7 @@ void loop(){
   client.publish(soilTopic, charBuf_soil);
   client.publish(lightTopic, charBuf_light);
   
-  delay(1000  );
+  delay(5000  );
 
 }
 
