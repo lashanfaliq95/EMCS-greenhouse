@@ -1,3 +1,7 @@
+#IDE files
+server/.idea
+server/.idea/
+
 # Logs
 logs
 *.log
