@@ -56,13 +56,23 @@ void setup() {
   }
 
 }
+int acuatorMatrix[4][2] = {
 
+  {1, 1},  
+  {1, 0},
+  {0, 1},
+  {0, 0}
+  
+}
 void loop() {
   // put your main code here, to run repeatedly:
   int rand_ = random(1, 5);
   int wait_time = rand_ * 1000 * 60;
   // todo:coontrol acutators and Read here sensor data and concat to relevent values
 
+  int actuator_control[2] = actuatorMatrix[random(0,3)];
+
+  // todo: actuator control code here
   
   client.publish("newData", 
   "{\"fan\":1, \"humidifier\":1, \"duration\":"+ String(rand_) +", \"start_temp\":25, \"end_temp\": 0, \"start_hum\":50, \"end_hum\":0}");
