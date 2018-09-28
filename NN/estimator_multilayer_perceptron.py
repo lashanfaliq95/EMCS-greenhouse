@@ -16,7 +16,7 @@ test_labels = labels[2000:]
 print(train_labels.shape[0])
 
 learning_rate = 1
-training_epochs = 15
+training_epochs = 100
 batch_size = 100
 display_step = 1
 
@@ -24,6 +24,8 @@ n_hidden_1 = 4
 n_hidden_2 = 4
 n_input = 4
 n_classes = 4
+
+model_path = "/home/himasha/Desktop/FYP/EMCS-greenhouse/NN/Model/model.ckpt"
 
 x = tf.placeholder(tf.float32, shape=[None, n_input])
 y = tf.placeholder(tf.float32, shape=[None, n_classes])
@@ -58,6 +60,7 @@ cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, label
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 init = tf.global_variables_initializer()
+saver = tf.train.Saver()
 
 cost_history = []
 accuracy_history = []
@@ -91,6 +94,9 @@ with tf.Session() as sess:
 
 
     print("Optimization finished")
+
+    save_path = saver.save(sess, model_path)
+    print("Model saved in file %s" % save_path)
 
     plt.plot(cost_history)
     plt.show()
