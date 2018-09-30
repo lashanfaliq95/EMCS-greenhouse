@@ -9,8 +9,11 @@
 #define dht_dpin 0//pin D3 for dht11
 #define MQTT_SERVER "192.168.1.100"
 
+
+void readSensors();
 void callback(char* topic, byte* payload, unsigned int length);
-//
+String macToStr(const uint8_t* mac);
+
 DHT dht(dht_dpin, DHTTYPE);
 //BH1750 lightMeter;
 WiFiClient wifiClient;
@@ -19,10 +22,16 @@ PubSubClient client(MQTT_SERVER, 1883, callback, wifiClient);
 const char* ssid = "Neal";
 const char* password = "recursiveinternet";
 
+
+
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
   Serial.println("hello");
+
+  //intialising the dht11 sensors
+  dht.begin();
 
  WiFi.begin(ssid, password);
   if(WiFi.status() != WL_CONNECTED){
@@ -56,26 +65,28 @@ void setup() {
   }
 
 }
-int acuatorMatrix[4][2] = {
 
-  {1, 1},  
-  {1, 0},
-  {0, 1},
-  {0, 0}
-  
-}
 void loop() {
   // put your main code here, to run repeatedly:
   int rand_ = random(1, 5);
   int wait_time = rand_ * 1000 * 60;
-  // todo:coontrol acutators and Read here sensor data and concat to relevent values
 
-  int actuator_control[2] = actuatorMatrix[random(0,3)];
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+int acuatorMatrix[4][2] = { {1, 1},  {1, 0},{0, 1},{0, 0}};
 
+ int actuator_control[2];
+ int temp=random(0,3);
+  actuator_control[0]= acuatorMatrix[temp][0];
+ actuator_control[1]= acuatorMatrix[temp][1];
   // todo: actuator control code here
-  
-  client.publish("newData", 
-  "{\"fan\":1, \"humidifier\":1, \"duration\":"+ String(rand_) +", \"start_temp\":25, \"end_temp\": 0, \"start_hum\":50, \"end_hum\":0}");
+ String fanControl=String(actuator_control[0]);
+ String humidifierControl=String(actuator_control[1]);
+ String tempVal=String(t);
+ String humVal=String(h);
+String ran=String(rand_);
+  String json="{\"fan\":"+fanControl+", \"humidifier\":"+humidifierControl+", \"duration\":"+ran  +", \"start_temp\":"+tempVal+", \"end_temp\": 0, \"start_hum\":"+humVal+", \"end_hum\":0}";
+  client.publish("newData",);
   
   Serial.println("waiting for " + wait_time);
   delay(wait_time);
@@ -112,3 +123,6 @@ String macToStr(const uint8_t* mac){
 
   return result;
 } 
+
+
+
