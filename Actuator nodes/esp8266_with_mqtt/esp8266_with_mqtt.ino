@@ -7,18 +7,20 @@
 #include "DHT.h"        // including the library of DHT11 temperature and humidity sensor
 #define DHTTYPE DHT11   // DHT 11
 #define dht_dpin 0//pin D3 for dht11
-#define MQTT_SERVER "192.168.8.105"
+#define dht_dpin2 5//pin D1 for dht11 external
+#define MQTT_SERVER "192.168.8.104"
 
 void readSensors();
 void callback(char* topic, byte* payload, unsigned int length);
 
 DHT dht(dht_dpin, DHTTYPE);
+DHT dht2(dht_dpin2, DHTTYPE);
 BH1750 lightMeter;
 WiFiClient wifiClient;
 PubSubClient client(MQTT_SERVER, 1883, callback, wifiClient);
 
 const char* ssid = "D4G";
-const char* password = "NoInternet";
+const char* password = "palayanbn";
 const int lightPin = D4;
 
 char* lightTopic = "light";
@@ -26,7 +28,7 @@ char* tempTopic = "temperature";
 char* humidTopic = "humidity";
 char* soilMoistureTopic = "soilMoisture";
 char * fan="fan";
-char * pump="pump";
+char * light="light";
 char * humidifier="humidifier";
 
 int sense_Pin = 0; // sensor input at Analog pin A0 for the soil moisture sensor
@@ -42,7 +44,8 @@ void setup() {
  // digitalWrite(lightPin, HIGH);
 
   //intialising the dht11 sensors
-  dht.begin();
+  DHT dht(dht_dpin, DHTTYPE);
+DHT dht2(dht_dpin2, DHTTYPE);
   
   //start the serial line for debugging
   Serial.begin(115200);
@@ -107,7 +110,7 @@ Serial.println("off");
   }
   }
 
-    if(topicStr.equals("pump")){
+    if(topicStr.equals("light")){
   //turn the light on if the payload is '1' and publish to the MQTT server a confirmation message
   if(payload[0] == '1'){
      digitalWrite(D5, HIGH);
@@ -222,6 +225,8 @@ void readSensors() {
   float h = dht.readHumidity();
   float t = dht.readTemperature();
 
+ float h_ex = dht2.readHumidity();
+  float t_ex = dht2.readTemperature();
 //soil moisture level
   value = analogRead(sense_Pin);
   value = value / 10;
@@ -229,17 +234,29 @@ void readSensors() {
 //light intensity
   double light = 10;
 
+  float tempL=random(40,45);
+
 char  tempt[10];
 char temph[10];
 char tempvalue[10];
+char temptEx[10];
+char temphEx[10];
+char tempLight[10];
   
  dtostrf(t,4,4,tempt);
  dtostrf(h,4,4,temph);
  dtostrf(value,4,4,tempvalue);
+  dtostrf(h_ex,4,4,temphEx);
+ dtostrf(t_ex,4,4,temptEx);
+  dtostrf(tempL,4,4,tempLight);
  
-  client.publish(lightTopic, "Light On");
+ 
+  client.publish(lightTopic,tempLight);
   client.publish(tempTopic, tempt);
   client.publish(humidTopic,temph);
   client.publish(soilMoistureTopic,tempvalue);
+   client.publish(externalTempTopic,temph);
+  client.publish(externalHumidTopic,tempvalue);
+  
 }
 
