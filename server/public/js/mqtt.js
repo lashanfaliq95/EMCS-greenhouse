@@ -1,4 +1,4 @@
-var part_one,part_two,graph_temp,graph_hum,graph_soil,graph_light;
+var part_one,part_two,graph_temp,graph_hum,graph_soil,graph_light,graph_externalTemp,graph_externalHum ;
 var count = 0;
 var socket = io();
 socket.on('mqtt', function(msg){
@@ -16,6 +16,10 @@ socket.on('mqtt', function(msg){
      graph_soil = part_two;
    }else if(part_one == "light"){
      graph_light = part_two;
+   }else if (part_one == "externalTemp") {
+       graph_externalTemp = part_two;
+   } else if (part_one == "externalHUm") {
+       graph_externalHum = part_two;
    }
 });
 
