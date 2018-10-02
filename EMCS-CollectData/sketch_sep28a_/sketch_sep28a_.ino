@@ -26,8 +26,6 @@ const char* ssid = "D4G";
 const char* password = "palayanbn";
 
 
-
-
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
@@ -39,6 +37,9 @@ void setup() {
   //intialising the dht11 sensors
   dht.begin();
   dht2.begin();
+
+  //intialising the dht11 sensors
+  dht.begin();
 
  WiFi.begin(ssid, password);
   if(WiFi.status() != WL_CONNECTED){
@@ -76,6 +77,7 @@ void setup() {
 void loop() {
   
   // put your main code here, to run repeatedly:
+
   
   float h;
   float t;
@@ -85,13 +87,12 @@ do{
   t = dht.readTemperature();
 }while(h != h);
 
-
-
 int acuatorMatrix[4][2] = { {1, 1},  {1, 0},{0, 1},{0, 0}};
 
  int actuator_control[2];
  int temp=random(0,3);
   actuator_control[0]= acuatorMatrix[temp][0];
+
   actuator_control[1]= acuatorMatrix[temp][1];
   int rand_;
   int wait_time;
@@ -116,7 +117,7 @@ int acuatorMatrix[4][2] = { {1, 1},  {1, 0},{0, 1},{0, 0}};
   String humidifierControl=String(actuator_control[1]);
   String tempVal=String(t); 
   String humVal=String(h);
-  
+
   
   String json="{\"fan\":"+fanControl+", \"humidifier\":"+humidifierControl+", \"duration\":"+ran  +", \"start_temp\":"+tempVal+", \"end_temp\": 0, \"start_hum\":"+humVal+", \"end_hum\":0}";
    //String json="{\"fan\":"+fanControl+", \"humidifier\":"+humidifierControl+", \"duration\":"+ran  +", \"start_temp\":"+tempVal+", \"start_temp_external\":"+tempVal_ex+", \"end_temp\": 0, \"start_hum\":"+humVal+", \"start_hum_external\":"+humVal_ex+", \"end_hum\":0}";

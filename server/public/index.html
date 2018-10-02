@@ -117,10 +117,47 @@
                             </li>
                             <!-- <li role="presentation"><a href="#">Messages <span class="badge">3</span></a></li> -->
 
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <span>Fan 1</span>
+          <input type="checkbox" name="switch" class="switch-checkbox" onclick="fan1_control(this)" id="switch1" >
+            <label class="switch-label" for="switch1">
+                <span class="switch-inner"></span>
+                <!-- <span class="switch-switch"></span> -->
+            </label>
+    <div class="switch7">
+      <span>Pump 1</span>
+    <input type="checkbox" name="switch" class="switch-checkbox" onclick="pump1_control()" id="switch7" >
+    <label class="switch-label" for="switch7">
+      <span class="switch-inner"></span>
+    </label>
+    </div>
+        <div class="switch8">
+        <span>Humidifire 1</span>
+        <input type="checkbox" name="switch" class="switch-checkbox" onclick="humidifier1_control()" id="switch8" >
+        <label class="switch-label" for="switch8">
+          <span class="switch-inner"></span>
+        </label>
+      </div>
+    </div>
+    </div>
+    <div class="panel-footer">
+        Status
+    </div>
+  </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        Building Status
+      </div>
+      <div class="panel-body">
+        <div style="width: 900px; height: 400px; margin: 0 auto">
+          <div id="container-speed" style="width: 300px; height: 200px; float: left"></div>
+          <div id="container-rpm" style="width: 300px; height: 200px; float: left"></div>
+          <div id="container-speed1" style="width: 300px; height: 200px; float: left"></div>
+          <div id="container-rpm1" style="width: 300px; height: 200px; float: left"></div>
+          <div id="container-externalTemperature" style="width: 300px; height: 200px; float: left"></div>
+          <div id="container-externalHumidity" style="width: 300px; height: 200px; float: left"></div>
         </div>
         <!-- /.row -->
         <div class="row">
