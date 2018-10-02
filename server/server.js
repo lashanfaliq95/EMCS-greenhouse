@@ -24,7 +24,7 @@ var date;
 var data = 'none'
 // api = require('./routes/api');
 
-var t_p, h_p, s_p, l_p, state_temp_time, state_hum_time, state_soil_time, state_light_time;
+var t_p, h_p, s_p, l_p,tEx_p,hEx_p, state_temp_time, state_hum_time, state_soil_time, state_light_time,state_temEx_time,state_humEx_time;
 var t = '';
 var h = '';
 var s = '';
@@ -35,6 +35,8 @@ var hum_ = [];
 var light_ = [];
 var temp_ = [];
 var soil_ = [];
+var exhum_ = [];
+var extemp_ = [];
 
 mongoose.Promise = global.Promise;
 
@@ -91,6 +93,18 @@ var l_data = new mongoose.Schema({
     val: {type: String}
 
 });
+var tEx_data = new mongoose.Schema({
+
+    time: {type: String},
+    val: {type: String}
+
+});
+var hEx_data = new mongoose.Schema({
+
+    time: {type: String},
+    val: {type: String}
+
+});
 // Compiles the schema into a model, opening (or creating, if
 // nonexistent) the 'PowerUsers' collection in the MongoDB database
 var PUser = mongoose.model('data_store', userSchema);
@@ -99,6 +113,8 @@ var PUser3 = mongoose.model('temp_data', t_data);
 var PUser4 = mongoose.model('hum_data', h_data);
 var PUser5 = mongoose.model('soil_data', s_data);
 var PUser6 = mongoose.model('light_data', l_data);
+var PUser7 = mongoose.model('soil_data', tEx_data);
+var PUser8 = mongoose.model('light_data', hEx_data);
 
 
 // create an mqtt client object and connect to the mqtt broker
@@ -198,6 +214,8 @@ client.on('connect', function () {
     client.subscribe('humidity');
     client.subscribe('light');
     client.subscribe('soilMoisture');
+    client.subscribe('externalTemp');
+    client.subscribe('externalHUm');
 
 });
 
@@ -294,6 +312,50 @@ client.on('message', function (topic, message) {
         }
         l_p = l;
         apply_rule('light');
+    }
+
+    if (topic.toString() == 'externalTemp') {
+        // console.log(topic.toString() + ' ' + message.toString());
+        l = message.toString();
+        io.emit('mqtt', 'externalTemp ' + l);
+
+        // console.log(l);
+
+        var dnewrow = new PUser7({
+            time: date,
+            val: l
+
+        });
+
+        if (tEx_p != l) {
+            dnewrow.save(function (err) {
+                if (err) console.log('Error on save!')
+            });
+        }
+        l_p = l;
+       // apply_rule('light');
+    }
+
+    if (topic.toString() == 'externalHUm') {
+        // console.log(topic.toString() + ' ' + message.toString());
+        l = message.toString();
+        io.emit('mqtt', 'externalHUm ' + l);
+
+        // console.log(l);
+
+        var dnewrow = new PUser8({
+            time: date,
+            val: l
+
+        });
+
+        if (hEx_p != l) {
+            dnewrow.save(function (err) {
+                if (err) console.log('Error on save!')
+            });
+        }
+        l_p = l;
+       // apply_rule('light');
     }
     // client.end()
 
@@ -500,7 +562,53 @@ setInterval(function () {
 
         }
         // console.log(hum_.length);
-        io.emit('mqtt_data', 'testTopic ' + light_);
+        io.emit('mqtt_data', 'light ' + light_);
+
+    });
+    PUser7.find({
+        _id: {
+            $gt: ObjectId.createFromTime(Date.now() / 1000 - 24 * 60 * 60)
+        }
+    }, 'val', function (err, data) {
+
+        state_temEx_time = data.toString().split(',');
+        // console.log(data);
+        for (var i = 0; i <= data.length - 1; i++) {
+            extemp_[i] = state_temEx_time[2 * i + 1].substring(7, 12);
+            if ( extemp_[i]  == "nan' ") {
+
+                extemp_[i]  = "0.0";
+                extemp_.splice(i, 1);
+            }
+
+            // console.log(light_[i]);
+
+        }
+        // console.log(hum_.length);
+        io.emit('mqtt_data', 'extemp ' +  extemp_);
+
+    });
+    PUser8.find({
+        _id: {
+            $gt: ObjectId.createFromTime(Date.now() / 1000 - 24 * 60 * 60)
+        }
+    }, 'val', function (err, data) {
+
+        state_humEx_time = data.toString().split(',');
+        // console.log(data);
+        for (var i = 0; i <= data.length - 1; i++) {
+            exhum_[i] = state_humEx_time[2 * i + 1].substring(7, 12);
+            if (exhum_[i] == "nan' ") {
+
+                exhum_[i] = "0.0";
+                exhum_.splice(i, 1);
+            }
+
+            // console.log(light_[i]);
+
+        }
+        // console.log(hum_.length);
+        io.emit('mqtt_data', 'exhum ' + exhum_);
 
     });
 
