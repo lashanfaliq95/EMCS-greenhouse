@@ -37,21 +37,36 @@ var prevId;
 client.on('message', function (topic, message) {
   if(topic === "newData"){
   	context = message.toString();
-  	console.log(topic, ' ' ,JSON.parse(context));
-    db.collection("dataset").insertOne(JSON.parse(context), function(err, result) {
-     if (err) throw err;
-     console.log(result.ops[0]);
-     prevId = result.ops[0]._id;
+    var d = new Date();
+  	try{
+      console.log(d.toString(), ':: ' ,topic, ' => ' ,JSON.parse(context));
+      db.collection("dataset").insertOne(JSON.parse(context), function(err, result) {
+      if (err) throw err;
+      //console.log(result.ops[0]);
+      prevId = result.ops[0]._id;
+
    });
+ }catch(e){
+   console.log('Mmmm ', context);
+   console.error("Error --------- ", e);
+   prevId = null;
+ }
  } else if(topic === "updateData"){
    context = message.toString();
-   console.log(topic, ' ' ,JSON.parse(context));
-   db.collection("dataset").update({_id: prevId},
-     { $set: JSON.parse(context)},
-      function(err, result) {
-    if (err) throw err;
-    console.log(result);
+   var d = new Date();
+   try{
+     console.log(d.toString(), ':: ' ,topic, ' => ' ,JSON.parse(context));
+     if(prevId !== null){
+       db.collection("dataset").update({_id: prevId},
+       { $set: JSON.parse(context)},
+       function(err, result) {
+         if (err) throw err;
+         console.log(result.result);
   });
+}
+}catch(e){
+console.error("Error --------- ", e);
+}
 } else {
   db.collection("inventory").insertOne({name : message.toString()}, function(err, result) {
    if (err) throw err;
