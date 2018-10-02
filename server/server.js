@@ -301,6 +301,7 @@ client.on('message', function (topic, message) {
 
 
 });
+var pre_fan_on = false;
 function apply_rule(sensor){
 // find each person with a last name matching 'Ghost'
     var query = PUser.find({ 'sensor_type' : sensor});
@@ -337,17 +338,24 @@ function apply_rule(sensor){
                 }
             } else if(single_rule.sensor_type === 'moist'){
                 console.log('come here', parseInt(single_rule.min) , parseInt(s_p), parseInt(single_rule.min) > parseInt(s_p));
+
                 if(parseInt(single_rule.min) < parseInt(s_p)){
                     var actuators = single_rule.actuators;
-                    client.publish('fan' ,
-                         "1");
+                   if(!pre_fan_on) {
+                       client.publish('fan' ,
+                           "1");
+                   }
                     _.each(actuators, function (actuator) {
                         // client.publish(actuator.actuator_type, actuator.isOn ? "0" : "1");
                     })
                 } else {
-                    client.publish('fan' ,
-                        "0");
+                    if(pre_fan_on){
+
+                        client.publish('fan' ,
+                            "0");
+                    }
                 }
+                pre_fan_on = parseInt(single_rule.min) < parseInt(s_p);
             }
         })
     });
