@@ -2,7 +2,7 @@ var gaugeOptions = {
     chart: {
         type: 'solidgauge'
     },
-    title: null,
+    title: "GUAGE",
     pane: {
         center: ['50%', '85%'],
         size: '140%',
@@ -70,7 +70,7 @@ var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptio
             '<span style="font-size:12px;color:silver">C</span></div>'
         },
         tooltip: {
-            valueSuffix: ' C'
+            valueSuffix: String.fromCharCode(176)+'C'
         }
     }]
 
@@ -92,7 +92,7 @@ var chartRpm = Highcharts.chart('container-rpm', Highcharts.merge(gaugeOptions, 
         dataLabels: {
             format: '<div style="text-align:center"><span style="font-size:25px;color:' +
             ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y:.1f}</span><br/>' +
-            '<span style="font-size:12px;color:silver">%</span></div>'
+            '<span style="font-size:12px;color:silver"></span></div>'
         },
         tooltip: {
             valueSuffix: ' %'
@@ -104,14 +104,14 @@ var chartRpm = Highcharts.chart('container-rpm', Highcharts.merge(gaugeOptions, 
 var chartSpeed1 = Highcharts.chart('container-speed1', Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
-        max: 1500,
+        max: 150,
         title: {
             text: 'Soil Moisture'
         }
     },
 
     series: [{
-        name: 'RPM',
+        name: 'Soil',
         data: [1],
         dataLabels: {
             format: '<div style="text-align:center"><span style="font-size:25px;color:' +
@@ -127,14 +127,14 @@ var chartSpeed1 = Highcharts.chart('container-speed1', Highcharts.merge(gaugeOpt
 var chartRpm1 = Highcharts.chart('container-rpm1', Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
-        max: 70000,
+        max: 120,
         title: {
             text: 'Light intensity'
         }
     },
 
     series: [{
-        name: 'RPM',
+        name: 'light',
         data: [1],
         dataLabels: {
             format: '<div style="text-align:center"><span style="font-size:25px;color:' +
@@ -151,19 +151,19 @@ var chartRpm1 = Highcharts.chart('container-rpm1', Highcharts.merge(gaugeOptions
 var chartExternalTemp = Highcharts.chart('container-externalTemperature', Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
-        max: 70000,
+        max: 120,
         title: {
             text: 'External Temperature'
         }
     },
 
     series: [{
-        name: 'RPM',
+        name: 'ext',
         data: [1],
         dataLabels: {
             format: '<div style="text-align:center"><span style="font-size:25px;color:' +
             ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y:.1f}</span><br/>' +
-            '<span style="font-size:12px;color:silver">lux</span></div>'
+            '<span style="font-size:12px;color:silver">C</span></div>'
         },
         tooltip: {
             valueSuffix: ' %'
@@ -175,19 +175,19 @@ var chartExternalTemp = Highcharts.chart('container-externalTemperature', Highch
 var chartExternalHumidity = Highcharts.chart('container-externalHumidity', Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
-        max: 70000,
+        max: 120,
         title: {
             text: 'External Humidity'
         }
     },
 
     series: [{
-        name: 'RPM',
+        name: 'exh',
         data: [1],
         dataLabels: {
             format: '<div style="text-align:center"><span style="font-size:25px;color:' +
             ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y:.1f}</span><br/>' +
-            '<span style="font-size:12px;color:silver">lux</span></div>'
+            '<span style="font-size:12px;color:silver"></span></div>'
         },
         tooltip: {
             valueSuffix: ' %'
@@ -196,44 +196,48 @@ var chartExternalHumidity = Highcharts.chart('container-externalHumidity', Highc
 
 }));
 setInterval(function () {
-    // Speed
-    var point,
-        newVal,
-        inc;
-    // RPM
-    if (chartSpeed) {
-        point = chartSpeed.series[0].points[0];
-        point.update(Math.round(graph_temp));
-    }
-    if (chartRpm) {
-        point = chartRpm.series[0].points[0];
-        point.update(Math.round(graph_hum));
-    }
-    if (chartSpeed1) {
-        point = chartSpeed1.series[0].points[0];
-        point.update(Math.round(graph_soil));
-    }
-    if (chartRpm1) {
-        point = chartRpm1.series[0].points[0];
-        point.update(Math.round(graph_light));
-    }
-    if (chartExternalHumidity) {
-        point = chartExternalHumidity.series[0].points[0];
-        point.update(Math.round(graph_externalHum));
-    }
-    if (chartExternalTemp) {
-        point = chartExternalTemp.series[0].points[0];
-        point.update(Math.round( graph_externalTemp));
-    }
-    document.getElementById("real_temp").innerHTML = graph_temp;
-    document.getElementById("real_hum").innerHTML = graph_hum;
-    document.getElementById("real_soil").innerHTML = graph_soil;
-    document.getElementById("real_light").innerHTML = graph_light;
-    document.getElementById("real_externalTemp").innerHTML = graph_externalTemp;
-    document.getElementById("real_externalHum").innerHTML = graph_externalHum;
-    document.getElementById("count").innerHTML = count;
-// var res = graph_temp+' '+graph_hum+' '+raph_soil+' '+graph_light;
-    var res = "test";
-    $("#test").text(res);
+    try{
 
+      // Speed
+      var point,
+          newVal,
+          inc;
+      // RPM
+      if (chartSpeed) {
+          point = chartSpeed.series[0].points[0];
+          point.update(Math.round(graph_temp));
+      }
+      if (chartRpm) {
+          point = chartRpm.series[0].points[0];
+          point.update(Math.round(graph_hum));
+      }
+      if (chartSpeed1) {
+          point = chartSpeed1.series[0].points[0];
+          point.update(Math.round(graph_soil));
+      }
+      if (chartRpm1) {
+          point = chartRpm1.series[0].points[0];
+          point.update(Math.round(graph_light));
+      }
+      if (chartExternalHumidity) {
+          point = chartExternalHumidity.series[0].points[0];
+          point.update(Math.round(graph_externalHum));
+      }
+      if (chartExternalTemp) {
+          point = chartExternalTemp.series[0].points[0];
+          point.update(Math.round( graph_externalTemp));
+      }
+      document.getElementById("real_temp").innerHTML = graph_temp;
+      document.getElementById("real_hum").innerHTML = graph_hum;
+      document.getElementById("real_soil").innerHTML = graph_soil;
+      document.getElementById("real_light").innerHTML = graph_light;
+      document.getElementById("real_externalTemp").innerHTML = graph_externalTemp;
+      document.getElementById("real_externalHum").innerHTML = graph_externalHum;
+      document.getElementById("count").innerHTML = count;
+  // var res = graph_temp+' '+graph_hum+' '+raph_soil+' '+graph_light;
+      var res = "test";
+      $("#test").text(res);
+    }catch(e){
+      //ddconsole.log("Err : ",e);
+    }
 }, 100);
