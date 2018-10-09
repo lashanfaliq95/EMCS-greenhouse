@@ -1,2 +1,2 @@
-model_checkpoint_path: "/home/himasha/Desktop/FYP/Neural Network/Model/"
-all_model_checkpoint_paths: "/home/himasha/Desktop/FYP/Neural Network/Model/"
+model_checkpoint_path: "/home/himasha/Desktop/FYP/EMCS-greenhouse/NN/Model/model.ckpt"
+all_model_checkpoint_paths: "/home/himasha/Desktop/FYP/EMCS-greenhouse/NN/Model/model.ckpt"

@@ -2,6 +2,8 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import pandas as pd
 
+tf.reset_default_graph()   # To clear the defined variables and operations of the previous cell
+
 df = pd.read_csv('Dataset/new_dataset.csv')
 print(df.shape)
 input_data = df.values[:, 4:8]
@@ -15,18 +17,20 @@ test_labels = labels[2000:]
 
 print(train_labels.shape[0])
 
-learning_rate = 1
-training_epochs = 15
+learning_rate = 0.2
+training_epochs = 50
 batch_size = 100
 display_step = 1
 
-n_hidden_1 = 4
-n_hidden_2 = 4
+n_hidden_1 = 10
+n_hidden_2 = 20
 n_input = 4
 n_classes = 4
 
-x = tf.placeholder(tf.float32, shape=[None, n_input])
-y = tf.placeholder(tf.float32, shape=[None, n_classes])
+model_path = "/home/himasha/Desktop/FYP/EMCS-greenhouse/NN/Model/model.ckpt"
+
+x = tf.placeholder(tf.float32, shape=[None, n_input],name="x")   #26.7,927,97.8,34
+y = tf.placeholder(tf.float32, shape=[None, n_classes],name="y")
 
 
 def multilayer_perceptron(x, weights, biases):
@@ -36,7 +40,7 @@ def multilayer_perceptron(x, weights, biases):
     layer_2 = tf.add(tf.matmul(layer_1, weights['h2']), biases['b2'])
     layer_2 = tf.nn.relu(layer_2)
 
-    out_layer = tf.add(tf.matmul(layer_2, weights['out']), biases['out'])
+    out_layer = tf.add(tf.matmul(layer_2, weights['out']), biases['out'],name="op_to_restore")
     return out_layer
 
 
@@ -54,10 +58,12 @@ biases = {
 
 pred = multilayer_perceptron(x, weights, biases)
 
-cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
+cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y)
+cost = tf.reduce_mean(cross_entropy)
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 init = tf.global_variables_initializer()
+saver = tf.train.Saver()
 
 cost_history = []
 accuracy_history = []
@@ -84,13 +90,16 @@ with tf.Session() as sess:
             accuracy = tf.reduce_mean(tf.cast(correct_prediction,"float"))
             acu_temp = accuracy.eval({x: test_input, y: test_labels})
 
+
             accuracy_history.append(acu_temp)
 
             cost_history.append(avg_cost)
             print("epoch: ",'%04d' % (epoch+1), "cost=", '%05f '%(avg_cost), " Accuracy=", '%05f '%(acu_temp*100))
 
-
     print("Optimization finished")
+    writer = tf.summary.FileWriter('Graphs', sess.graph)
+    save_path = saver.save(sess, model_path)
+    print("Model saved in file %s" % save_path)
 
     plt.plot(cost_history)
     plt.show()
