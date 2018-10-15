@@ -19,7 +19,17 @@ var express = require('express'),
     ObjectId = require('mongodb').ObjectID;
 // // create a socket object that listens on port 5000
 var io = require('socket.io')(http);
+//start mqtt broker
+var mosca = require('mosca');
+var settings = {
+		port:1883
+		}
 
+var server = new mosca.Server(settings);
+
+server.on('ready', function(){
+console.log("ready");
+});
 var date;
 var data = 'none'
 // api = require('./routes/api');
@@ -29,6 +39,8 @@ var t = '';
 var h = '';
 var s = '';
 var l = '';
+var tEx='';
+var hEx='';
 var count = 0;
 
 var hum_ = [];
@@ -113,12 +125,14 @@ var PUser3 = mongoose.model('temp_data', t_data);
 var PUser4 = mongoose.model('hum_data', h_data);
 var PUser5 = mongoose.model('soil_data', s_data);
 var PUser6 = mongoose.model('light_data', l_data);
-var PUser7 = mongoose.model('soil_data', tEx_data);
-var PUser8 = mongoose.model('light_data', hEx_data);
+var PUser7 = mongoose.model('temp_ex_data', tEx_data);
+var PUser8 = mongoose.model('hum_ex_data', hEx_data);
 
 
 // create an mqtt client object and connect to the mqtt broker
-var client = mqtt.connect('mqtt://192.168.43.177');
+
+var client = mqtt.connect('mqtt://127.0.0.1:1883');
+
 
 http.listen((process.env.PORT || 8080), function () {
     //  http.listen((3000), function(){
@@ -209,13 +223,13 @@ io.sockets.on('connection', function (socket) {
 // listen to messages coming from the mqtt broker
 
 client.on('connect', function () {
-
+    console.log('Connect to mqtt broker');
     client.subscribe('temperature');
     client.subscribe('humidity');
     client.subscribe('light');
     client.subscribe('soilMoisture');
     client.subscribe('externalTemp');
-    client.subscribe('externalHUm');
+    client.subscribe('externalHum');
 
 });
 
@@ -252,7 +266,7 @@ client.on('message', function (topic, message) {
             // console.log("Temperature changed");
         }
         t_p = t;
-        apply_rule('temp');
+        //apply_rule('temp');
     }
     if (topic.toString() == 'humidity') {
       //  console.log(topic.toString() + ' ' + message.toString());
@@ -270,7 +284,7 @@ client.on('message', function (topic, message) {
             });
         }
         h_p = h;
-        apply_rule('hum');
+        //apply_rule('hum');
     }
 
     if (topic.toString() == 'soilMoisture') {
@@ -289,7 +303,7 @@ client.on('message', function (topic, message) {
             });
         }
         s_p = s;
-        apply_rule('moist');
+        //apply_rule('moist');
     }
 
     if (topic.toString() == 'light') {
@@ -316,45 +330,45 @@ client.on('message', function (topic, message) {
 
     if (topic.toString() == 'externalTemp') {
         // console.log(topic.toString() + ' ' + message.toString());
-        l = message.toString();
-        io.emit('mqtt', 'externalTemp ' + l);
+        tEx = message.toString();
+        io.emit('mqtt', 'externalTemp ' + tEx);
 
         // console.log(l);
 
         var dnewrow = new PUser7({
             time: date,
-            val: l
+            val: tEx
 
         });
 
-        if (tEx_p != l) {
+        if (tEx_p != tEx) {
             dnewrow.save(function (err) {
                 if (err) console.log('Error on save!')
             });
         }
-        l_p = l;
+        tEx_p = tEx;
        // apply_rule('light');
     }
 
-    if (topic.toString() == 'externalHUm') {
+    if (topic.toString() == 'externalHum') {
         // console.log(topic.toString() + ' ' + message.toString());
-        l = message.toString();
-        io.emit('mqtt', 'externalHUm ' + l);
+        hEx = message.toString();
+        io.emit('mqtt', 'externalHum ' + hEx);
 
         // console.log(l);
 
         var dnewrow = new PUser8({
             time: date,
-            val: l
+            val: hEx
 
         });
 
-        if (hEx_p != l) {
+        if (hEx_p != hEx) {
             dnewrow.save(function (err) {
                 if (err) console.log('Error on save!')
             });
         }
-        l_p = l;
+        hEx_p = hEx
        // apply_rule('light');
     }
     // client.end()
@@ -365,62 +379,62 @@ client.on('message', function (topic, message) {
 });
 var pre_fan_on = false;
 function apply_rule(sensor){
-// find each person with a last name matching 'Ghost'
-    var query = PUser.find({ 'sensor_type' : sensor});
-
-// selecting the `name` and `occupation` fields
-
-
-// execute the query at a later iftime
-    query.exec(function (err, rule_set) {
-        if (err) return handleError(err);
-        console.log('rule set', rule_set);
-        _.each(rule_set, function (single_rule) {
-            console.log(single_rule.sensor_type);
-
-            if(single_rule.sensor_type === 'temp'){
-                if(parseInt(single_rule.min) < parseInt(t_p)){
-                    var actuators = single_rule.actuators;
-                    _.each(actuators, function (actuator) {
-                        console.log('publish', {topic: actuator.actuator_type ,
-                            payload: actuator.isOn ? "1" : "0"});
-                            socket.emit('publish', {topic: actuator.actuator_type ,
-                                payload: actuator.isOn ? "1" : "0"});
-                    })
-                }
-            } else if(single_rule.sensor_type === 'hum'){
-                if(parseInt(single_rule.min) < parseInt(h_p)){
-                    var actuators = single_rule.actuators;
-                    _.each(actuators, function (actuator) {
-                        console.log('publish', {topic: actuator.actuator_type ,
-                            payload: actuator.isOn ? "1" : "0"});
-                        socket.emit('publish', {topic: actuator.actuator_type ,
-                            payload: actuator.isOn ? "1" : "0"});
-                    })
-                }
-            } else if(single_rule.sensor_type === 'moist'){
-                console.log('come here', parseInt(single_rule.min) , parseInt(s_p), parseInt(single_rule.min) > parseInt(s_p));
-
-                if(parseInt(single_rule.min) < parseInt(s_p)){
-                    var actuators = single_rule.actuators;
-                   if(!pre_fan_on) {
-                       client.publish('fan' ,
-                           "1");
-                   }
-                    _.each(actuators, function (actuator) {
-                        // client.publish(actuator.actuator_type, actuator.isOn ? "0" : "1");
-                    })
-                } else {
-                    if(pre_fan_on){
-
-                        client.publish('fan' ,
-                            "0");
-                    }
-                }
-                pre_fan_on = parseInt(single_rule.min) < parseInt(s_p);
-            }
-        })
-    });
+// // find each person with a last name matching 'Ghost'
+//     var query = PUser.find({ 'sensor_type' : sensor});
+//
+// // selecting the `name` and `occupation` fields
+//
+//
+// // execute the query at a later iftime
+//     query.exec(function (err, rule_set) {
+//         if (err) return handleError(err);
+//         console.log('rule set', rule_set);
+//         _.each(rule_set, function (single_rule) {
+//             console.log(single_rule.sensor_type);
+//
+//             if(single_rule.sensor_type === 'temp'){
+//                 if(parseInt(single_rule.min) < parseInt(t_p)){
+//                     var actuators = single_rule.actuators;
+//                     _.each(actuators, function (actuator) {
+//                         console.log('publish', {topic: actuator.actuator_type ,
+//                             payload: actuator.isOn ? "1" : "0"});
+//                             socket.emit('publish', {topic: actuator.actuator_type ,
+//                                 payload: actuator.isOn ? "1" : "0"});
+//                     })
+//                 }
+//             } else if(single_rule.sensor_type === 'hum'){
+//                 if(parseInt(single_rule.min) < parseInt(h_p)){
+//                     var actuators = single_rule.actuators;
+//                     _.each(actuators, function (actuator) {
+//                         console.log('publish', {topic: actuator.actuator_type ,
+//                             payload: actuator.isOn ? "1" : "0"});
+//                         socket.emit('publish', {topic: actuator.actuator_type ,
+//                             payload: actuator.isOn ? "1" : "0"});
+//                     })
+//                 }
+//             } else if(single_rule.sensor_type === 'moist'){
+//                 console.log('come here', parseInt(single_rule.min) , parseInt(s_p), parseInt(single_rule.min) > parseInt(s_p));
+//
+//                 if(parseInt(single_rule.min) < parseInt(s_p)){
+//                     var actuators = single_rule.actuators;
+//                    if(!pre_fan_on) {
+//                        client.publish('fan' ,
+//                            "1");
+//                    }
+//                     _.each(actuators, function (actuator) {
+//                         // client.publish(actuator.actuator_type, actuator.isOn ? "0" : "1");
+//                     })
+//                 } else {
+//                     if(pre_fan_on){
+//
+//                         client.publish('fan' ,
+//                             "0");
+//                     }
+//                 }
+//                 pre_fan_on = parseInt(single_rule.min) < parseInt(s_p);
+//             }
+//         })
+//     });
 }
 
 
