@@ -45,15 +45,15 @@ def multilayer_perceptron(x, weights, biases):
 
 
 weights = {
-    'h1': tf.Variable(tf.random_normal([n_input, n_hidden_1])),
-    'h2': tf.Variable(tf.random_normal([n_hidden_1, n_hidden_2])),
-    'out': tf.Variable(tf.random_normal([n_hidden_2, n_classes]))
+    'h1': tf.Variable(tf.random_normal([n_input, n_hidden_1]), name="h1"),
+    'h2': tf.Variable(tf.random_normal([n_hidden_1, n_hidden_2]), name="h2"),
+    'out': tf.Variable(tf.random_normal([n_hidden_2, n_classes]), name="out_w")
 }
 
 biases = {
-    'b1': tf.Variable(tf.random_normal([n_hidden_1])),
-    'b2': tf.Variable(tf.random_normal([n_hidden_2])),
-    'out': tf.Variable(tf.random_normal([n_classes]))
+    'b1': tf.Variable(tf.random_normal([n_hidden_1]), name="b1"),
+    'b2': tf.Variable(tf.random_normal([n_hidden_2]),name="b2"),
+    'out': tf.Variable(tf.random_normal([n_classes]),name="out_b")
 }
 
 pred = multilayer_perceptron(x, weights, biases)
