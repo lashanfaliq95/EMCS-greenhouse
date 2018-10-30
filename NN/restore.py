@@ -1,24 +1,55 @@
+import sys
 
 import tensorflow as tf
 
-#Prepare to feed input, i.e. feed_dict and placeholders
-w1 = tf.placeholder("float", name="w1")
-w2 = tf.placeholder("float", name="w2")
-b1= tf.Variable(2.0,name="bias")
-feed_dict ={w1:4,w2:8}
+def multilayer_perceptron(x, weights, biases):
+    layer_1 = tf.add(tf.matmul(x, weights['h1']), biases['b1'])
+    layer_1 = tf.nn.relu(layer_1)
 
-#Define a test operation that we will restore
-w3 = tf.add(w1,w2)
-w4 = tf.multiply(w3,b1,name="op_to_restore")
-sess = tf.Session()
-sess.run(tf.global_variables_initializer())
+    layer_2 = tf.add(tf.matmul(layer_1, weights['h2']), biases['b2'])
+    layer_2 = tf.nn.relu(layer_2)
 
-#Create a saver object which will save all the variables
-saver = tf.train.Saver()
+    out_layer = tf.add(tf.matmul(layer_2, weights['out']), biases['out'],name="op_to_restore")
+    return out_layer
 
-#Run the operation by feeding input
-print sess.run(w4,feed_dict)
-#Prints 24 which is sum of (w1+w2)*b1
+def predictint(values):
+    n_hidden_1 = 10
+    n_hidden_2 = 20
+    n_input = 4
+    n_classes = 4
 
-#Now, save the graph
-saver.save(sess, 'my_test_model',global_step=1000)
+    x = tf.placeholder(tf.float32, shape=[None, n_input], name="x")  # 26.7,927,97.8,34
+    # y = tf.placeholder(tf.float32, shape=[None, n_classes], name="y")
+
+    weights = {
+        'h1': tf.Variable(tf.zeros([n_input, n_hidden_1]), name="h1"),
+        'h2': tf.Variable(tf.zeros([n_hidden_1, n_hidden_2]), name="h2"),
+        'out': tf.Variable(tf.zeros([n_hidden_2, n_classes]), name="out_w")
+    }
+
+    biases = {
+        'b1': tf.Variable(tf.zeros([n_hidden_1]), name="b1"),
+        'b2': tf.Variable(tf.zeros([n_hidden_2]), name="b2"),
+        'out': tf.Variable(tf.zeros([n_classes]), name="out_b")
+    }
+
+    pred = multilayer_perceptron(x, weights, biases)
+
+    cross_entropy = tf.nn.softmax(logits=pred)
+
+    init_op = tf.global_variables_initializer()
+    saver = tf.train.Saver()
+
+    with tf.Session() as sess:
+        sess.run(init_op)
+        saver.restore(sess, tf.train.latest_checkpoint('Model'))
+
+        prediction = tf.argmax(cross_entropy, 1)
+        return prediction.eval(feed_dict={x: [values]}, session=sess)
+
+def main(argv1,argv2,argv3,argv4):
+    predint = predictint([argv1,argv2,argv3,argv4])
+    print (predint[0])
+
+if __name__ == "__main__":
+    main(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
