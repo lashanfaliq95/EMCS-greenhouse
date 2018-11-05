@@ -35,11 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="estimator_multilayer_perceptron.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="estimator_multilayer_perceptron.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/estimator_multilayer_perceptron.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="31" column="82" selection-start-line="31" selection-end-line="32" selection-end-column="64" />
+            <state relative-caret-position="210">
+              <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -47,10 +47,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="restore.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="leaf_detection_demo.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../../Tensorflow/models/research/object_detection/leaf_detection_demo.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1666">
+              <caret line="65" column="24" selection-start-line="65" selection-start-column="14" selection-end-line="65" selection-end-column="24" />
+              <folding>
+                <element signature="e#418#436#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="restore.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/restore.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
+            <state relative-caret-position="270">
               <caret line="20" column="87" selection-start-line="20" selection-start-column="71" selection-end-line="20" selection-end-column="87" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -95,18 +107,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="single_layer.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/single_layer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="43" column="11" selection-start-line="43" selection-start-column="11" selection-end-line="43" selection-end-column="11" />
-              <folding>
-                <element signature="e#32#63#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="train_dataset.csv" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Dataset/train_dataset.csv">
           <provider selected="true" editor-type-id="text-editor">
@@ -143,17 +143,18 @@
         <option value="$PROJECT_DIR$/estimator.py" />
         <option value="$PROJECT_DIR$/run_tensorboard" />
         <option value="$PROJECT_DIR$/estimator_single_perceptron.py" />
-        <option value="$PROJECT_DIR$/estimator_multilayer_perceptron.py" />
         <option value="$PROJECT_DIR$/stateCon.py" />
         <option value="$PROJECT_DIR$/Dataset/new_dataset.csv" />
         <option value="$PROJECT_DIR$/restore.py" />
+        <option value="$PROJECT_DIR$/../../../Tensorflow/models/research/object_detection/leaf_detection_demo.py" />
+        <option value="$PROJECT_DIR$/estimator_multilayer_perceptron.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="25" />
-    <option name="width" value="1920" />
-    <option name="height" value="1010" />
+    <option name="y" value="110" />
+    <option name="width" value="1910" />
+    <option name="height" value="756" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -171,11 +172,6 @@
               <item name="NN" type="b2602c69:ProjectViewProjectNode" />
               <item name="NN" type="462c0819:PsiDirectoryNode" />
               <item name="Dataset" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="NN" type="b2602c69:ProjectViewProjectNode" />
-              <item name="NN" type="462c0819:PsiDirectoryNode" />
-              <item name="Model" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -205,7 +201,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.restore">
+  <component name="RunManager" selected="Python.estimator_multilayer_perceptron">
     <configuration name="estimator" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Neural Network" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -305,8 +301,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.restore" />
         <item itemvalue="Python.estimator_multilayer_perceptron" />
+        <item itemvalue="Python.restore" />
         <item itemvalue="Python.stateCon" />
         <item itemvalue="Python.estimator_single_perceptron" />
         <item itemvalue="Python.estimator" />
@@ -328,15 +324,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1920" height="1010" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17239584" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17239584" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32705098" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.3292683" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.3292683" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -371,14 +368,10 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Model/Figure_1.png" />
     <entry file="file://$PROJECT_DIR$/single_layer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="555">
           <caret line="43" column="11" selection-start-line="43" selection-start-column="11" selection-end-line="43" selection-end-column="11" />
-          <folding>
-            <element signature="e#32#63#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -551,9 +544,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="555">
           <caret line="43" column="11" selection-start-line="43" selection-start-column="11" selection-end-line="43" selection-end-column="11" />
-          <folding>
-            <element signature="e#32#63#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -606,16 +596,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/estimator_multilayer_perceptron.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="31" column="82" selection-start-line="31" selection-end-line="32" selection-end-column="64" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Dataset/new_dataset.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="22935">
@@ -632,10 +612,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/restore.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
+        <state relative-caret-position="270">
           <caret line="20" column="87" selection-start-line="20" selection-start-column="71" selection-end-line="20" selection-end-column="87" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Tensorflow/models/research/object_detection/leaf_detection_demo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1666">
+          <caret line="65" column="24" selection-start-line="65" selection-start-column="14" selection-end-line="65" selection-end-column="24" />
+          <folding>
+            <element signature="e#418#436#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/estimator_multilayer_perceptron.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
