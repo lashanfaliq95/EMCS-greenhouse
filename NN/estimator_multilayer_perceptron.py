@@ -97,7 +97,7 @@ with tf.Session() as sess:
             print("epoch: ",'%04d' % (epoch+1), "cost=", '%05f '%(avg_cost), " Accuracy=", '%05f '%(acu_temp*100))
 
     print("Optimization finished")
-    writer = tf.summary.FileWriter('Graphs', sess.graph)
+    writer = tf.summary.FileWriter('/home/himasha/Desktop/FYP/EMCS-greenhouse/NN/Graphs', sess.graph)
     save_path = saver.save(sess, model_path)
     print("Model saved in file %s" % save_path)
 
