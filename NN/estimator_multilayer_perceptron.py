@@ -4,7 +4,7 @@ import pandas as pd
 
 tf.reset_default_graph()   # To clear the defined variables and operations of the previous cell
 
-df = pd.read_csv('Dataset/new_dataset.csv')
+df = pd.read_csv('/home/himasha/Desktop/FYP/EMCS-greenhouse/NN/Dataset/new_dataset.csv')
 print(df.shape)
 input_data = df.values[:, 4:8]
 labels = pd.get_dummies(df['9'])
