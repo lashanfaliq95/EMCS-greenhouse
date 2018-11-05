@@ -11,6 +11,7 @@ var express = require('express'),
     http = require('http').Server(app),
     router = express.Router(),
     mqtt = require('mqtt'),
+    PythonShell = require('python-shell'),
     path = require('path'),
     sys = require('util'),
     net = require('net'),
@@ -183,6 +184,34 @@ app.get('/', function (req, res) {
 app.get('/sensor_data', function (req, res) {
     res.json({notes: "Temp :23 Humidity :88 Light :10023 Soil :899"})
 });
+
+//--------------------------------------------------------------------
+
+var myPythonScript = "../NN/estimator_multilayer_perceptron.py";
+var pythonExecutable = "python";
+var uint8arrayToString = function(data){
+    return String.fromCharCode.apply(null, data);
+};
+app.get('/train', function (req, res) {
+    const spawn = require('child_process').spawn;
+    const scriptExecution = spawn(pythonExecutable, [myPythonScript]);
+    scriptExecution.stdout.on('data', (data) => {
+        console.log(uint8arrayToString(data));
+        res.send(uint8arrayToString(data));
+    });
+    // Handle error output
+    scriptExecution.stderr.on('data', (data) => {
+        // As said before, convert the Uint8Array to a readable string.
+        console.log(uint8arrayToString(data));
+    });
+
+    scriptExecution.on('exit', (code) => {
+        console.log("Process quit with code : " + code);
+    });
+});
+
+//---------------------------------------------------------------------
+
 var socket__;
 io.sockets.on('connection', function (socket) {
     // when socket connection publishes a message, forward that message

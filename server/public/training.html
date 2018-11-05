@@ -278,7 +278,7 @@
 
 
                             <div class="col-lg-4">
-                                <button type="button" class="btn btn-primary" style="height:70px; width:200px"><b><h3>Train</h3></b></button>
+                                <button type="button" class="btn btn-primary" onclick="trainNeuralNetwork()" style="height:70px; width:200px"><b><h3>Train</h3></b></button>
                             </div>
 
 
@@ -353,6 +353,12 @@
 
 <script type="text/javascript">
 
+    function trainNeuralNetwork() {
+        fetch('/train').then(function(req,res) {
+            // Use the response sent here
+            console.log("train");
+        })
+    }
  var main_plot = Highcharts.chart('container', {
     chart: {
         type: 'line'

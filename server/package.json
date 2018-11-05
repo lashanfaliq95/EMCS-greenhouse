@@ -13,6 +13,7 @@
     "mosca": "^2.8.3",
     "mqtt": "2.15.0",
     "sleep": "1.1.0",
-    "socket.io": "1.7.3"
+    "socket.io": "1.7.3",
+    "python-shell": "^1.0.6"
   }
 }
