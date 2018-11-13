@@ -131,10 +131,17 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+<<<<<<< Updated upstream
     <option name="x" value="10" />
     <option name="y" value="16" />
     <option name="width" value="1346" />
     <option name="height" value="732" />
+=======
+    <option name="x" value="1920" />
+    <option name="y" value="-2" />
+    <option name="width" value="1920" />
+    <option name="height" value="1082" />
+>>>>>>> Stashed changes
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -168,12 +175,20 @@
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="package.&#9;FILE&#9;file:///home/dinuka/FYP/EMCS-greenhouse/server/package.json" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+<<<<<<< Updated upstream
 <<<<<<< HEAD
     <property name="last_opened_file_path" value="$USER_HOME$/Project /react-admin" />
 =======
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
 >>>>>>> 2b6704af268d420179d3ab18fb3963a6e0fb0b43
+=======
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1538507801219" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+>>>>>>> Stashed changes
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">

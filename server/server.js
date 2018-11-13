@@ -11,6 +11,8 @@ var express = require('express'),
     http = require('http').Server(app),
     router = express.Router(),
     mqtt = require('mqtt'),
+    PythonShell = require('python-shell'),
+    fs = require('fs'),
     path = require('path'),
     sys = require('util'),
     net = require('net'),
@@ -48,6 +50,12 @@ var server = new mosca.Server(settings);
 server.on('ready', function(){
 console.log("ready");
 });
+
+//------------------------------
+var neuralNetworkRouter = require('./routes/neuralNetwork');
+app.use('/neuralNetwork', neuralNetworkRouter);
+
+//------------------------------
 var date;
 var data = 'none'
 // api = require('./routes/api');
@@ -203,6 +211,7 @@ app.get('/', function (req, res) {
 app.get('/sensor_data', function (req, res) {
     res.json({notes: "Temp :23 Humidity :88 Light :10023 Soil :899"})
 });
+
 var socket__;
 io.sockets.on('connection', function (socket) {
     // when socket connection publishes a message, forward that message
