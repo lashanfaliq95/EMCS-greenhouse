@@ -8,7 +8,7 @@
 #define DHTTYPE DHT11   // DHT 11
 #define dht_dpin 0//pin D3 for dht11
 #define dht_dpin2 5//pin D1 for dht11 external
-#define MQTT_SERVER "192.168.8.104"
+#define MQTT_SERVER "192.248.42.20"
 
 void readSensors();
 void callback(char* topic, byte* payload, unsigned int length);
@@ -17,10 +17,10 @@ DHT dht(dht_dpin, DHTTYPE);
 DHT dht2(dht_dpin2, DHTTYPE);
 BH1750 lightMeter;
 WiFiClient wifiClient;
-PubSubClient client(MQTT_SERVER, 1883, callback, wifiClient);
+PubSubClient client(MQTT_SERVER, 1884, callback, wifiClient);
 
 const char* ssid = "D4G";
-const char* password = "palayanbn";
+const char* password = "pukadeepan";
 const int lightPin = D4;
 
 char* lightTopic = "light";

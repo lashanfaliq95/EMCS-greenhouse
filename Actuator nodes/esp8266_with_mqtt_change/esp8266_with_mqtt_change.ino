@@ -8,7 +8,7 @@
 #define DHTTYPE DHT11   // DHT 11
 #define dht_dpin 0//pin D3 for dht11
 #define dht_dpin2 5//pin D1 for dht11 external
-#define MQTT_SERVER "192.168.8.104"
+#define MQTT_SERVER "192.248.42.20"
 
 void readSensors();
 void callback(char* topic, byte* payload, unsigned int length);
@@ -20,7 +20,7 @@ WiFiClient wifiClient;
 PubSubClient client(MQTT_SERVER, 1883, callback, wifiClient);
 
 const char* ssid = "D4G";
-const char* password = "palayanbn";
+const char* password = "pukadeepan";
 const int lightPin = D4;
 
 char* lightTopic = "light";
@@ -32,17 +32,19 @@ char * light="light";
 char * humidifier="humidifier";
 char * externalTempTopic="externalTemp";
 char * externalHumidTopic="externalHum";
+char * airQualityTopic="airQuality";
 
 int sense_Pin = 0; // sensor input at Analog pin A0 for the soil moisture sensor
 int value = 0;
 
-
+int air=0;
 
 void setup() {
   //initialize the light as an output and set to LOW (off)
   pinMode(D4, OUTPUT); //light
   pinMode(D5, OUTPUT); //fan
   pinMode(D6, OUTPUT); //humidifier
+  pinMode(D0, INPUT); //humidifier
   digitalWrite(D4, HIGH);
   digitalWrite(D5, HIGH);
   digitalWrite(D6, HIGH);
@@ -77,8 +79,9 @@ void loop(){
  
   //MUST delay to allow ESP8266 WIFI functions to run
  
-         
+ 
    readSensors(); 
+   delay(500);
 }
 
 
@@ -232,8 +235,11 @@ void readSensors() {
   float t_ex = dht2.readTemperature();
 //soil moisture level
   value = analogRead(sense_Pin);
-  value = value / 10;
-  
+Serial.println(value);
+
+     air=digitalRead(D0);
+   Serial.println(air);
+   
 //light intensity
   double light = 10;
 
@@ -245,6 +251,7 @@ char tempvalue[10];
 char temptEx[10];
 char temphEx[10];
 char tempLight[10];
+char tempAir[10];
   
  dtostrf(t,4,4,tempt);
  dtostrf(h,4,4,temph);
@@ -252,6 +259,7 @@ char tempLight[10];
   dtostrf(h_ex,4,4,temphEx);
  dtostrf(t_ex,4,4,temptEx);
   dtostrf(tempL,4,4,tempLight);
+  dtostrf(air,4,4,tempAir);
  
  
   client.publish(lightTopic,tempLight);
@@ -260,6 +268,7 @@ char tempLight[10];
   client.publish(soilMoistureTopic,tempvalue);
    client.publish(externalTempTopic,temptEx);
   client.publish(externalHumidTopic,temphEx);
+  client.publish(airQualityTopic,tempAir);
   delay(100);
   
 }

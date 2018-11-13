@@ -20,12 +20,30 @@ var express = require('express'),
 // // create a socket object that listens on port 5000
 var io = require('socket.io')(http);
 //start mqtt broker
-var mosca = require('mosca');
-var settings = {
-		port:1883
-		}
+// var mosca = require('mosca');
+// var settings = {
+// 		port:1883
+// 		};
+//
+//
+// var server = new mosca.Server(settings);
 
+var mosca = require('mosca');
+
+
+
+var settings = {
+    port: 1884,
+    persistence: {
+        factory: mosca.persistence.Memory
+    },
+
+};
+
+//here we start mosca
 var server = new mosca.Server(settings);
+
+
 
 server.on('ready', function(){
 console.log("ready");
@@ -131,7 +149,7 @@ var PUser8 = mongoose.model('hum_ex_data', hEx_data);
 
 // create an mqtt client object and connect to the mqtt broker
 
-var client = mqtt.connect('mqtt://127.0.0.1:1883');
+var client = mqtt.connect('tcp://192.168.8.103:1884');
 
 
 http.listen((process.env.PORT || 8080), function () {
@@ -246,10 +264,10 @@ client.on('message', function (topic, message) {
     date.setHours(date.getHours() + 5);
     date.setMinutes(date.getMinutes() + 30);
 
-    // console.log(message)
+     console.log(message)
 
     if (topic.toString() == 'temperature') {
-       // console.log(topic.toString() + ' ' + message.toString());
+        console.log(topic.toString() + ' ' + message.toString());
         t = message.toString();
         io.emit('mqtt', 'temperature ' + t);
 
@@ -263,7 +281,7 @@ client.on('message', function (topic, message) {
             anewrow.save(function (err) {
                 if (err) console.log('Error on save!')
             });
-            // console.log("Temperature changed");
+             console.log("Temperature changed");
         }
         t_p = t;
         //apply_rule('temp');
@@ -301,6 +319,7 @@ client.on('message', function (topic, message) {
             cnewrow.save(function (err) {
                 if (err) console.log('Error on save!')
             });
+             console.log("soil moisture changed");
         }
         s_p = s;
         //apply_rule('moist');
