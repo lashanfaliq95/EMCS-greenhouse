@@ -1,6 +1,11 @@
 import sys
-
+import os
 import tensorflow as tf
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+tf.logging.set_verbosity(tf.logging.ERROR) #avoid print warnings
+
+model_path = "/home/himasha/Desktop/FYP/EMCS-greenhouse/NN/Model"
 
 def multilayer_perceptron(x, weights, biases):
     layer_1 = tf.add(tf.matmul(x, weights['h1']), biases['b1'])
@@ -42,7 +47,7 @@ def predictint(values):
 
     with tf.Session() as sess:
         sess.run(init_op)
-        saver.restore(sess, tf.train.latest_checkpoint('Model'))
+        saver.restore(sess, tf.train.latest_checkpoint(model_path))
 
         prediction = tf.argmax(cross_entropy, 1)
         return prediction.eval(feed_dict={x: [values]}, session=sess)
